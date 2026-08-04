@@ -57,8 +57,8 @@ export default function LoginPage() {
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-white/40 rounded-full blur-3xl mix-blend-overlay pointer-events-none" />
         
         <div className="max-w-135 px-8 lg:px-12 relative z-10">
-          <h2 className="text-[40px] font-extrabold text-primary leading-tight mb-5 tracking-tight">
-            Pesan Makam Lebih <span className="text-blue-600">Mudah & Terpercaya</span>
+          <h2 className="text-[40px] font-extrabold text-primary/80 leading-tight mb-5 tracking-tight">
+            Pesan Makam Lebih <span className="text-primary">Mudah & Terpercaya</span>
           </h2>
           <p className="text-slate-600 text-[16px] leading-relaxed">
             Bookimin hadir untuk membantu Anda mencari, membandingkan, dan memesan lahan peristirahatan terbaik dengan cepat dan aman.
@@ -135,7 +135,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-all duration-200 text-[15px] shadow-sm hover:shadow hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-sm flex items-center justify-center gap-2"
+                className="w-full h-12 bg-primary text-white font-semibold rounded-xl transition-all duration-200 text-[15px] shadow-sm hover:shadow hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-sm flex items-center justify-center gap-2"
               >
                 {isLoading ? (
                   <>
