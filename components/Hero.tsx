@@ -3,6 +3,7 @@
 import { Search } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export default function Hero() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -54,10 +55,14 @@ export default function Hero() {
 
         <div className="relative h-90 md:h-125 w-full animate-in fade-in slide-in-from-right-8 duration-700 delay-150">
           <div className="absolute inset-0 bg-gray-200 rounded-3xl overflow-hidden shadow-2xl">
-            <div className="w-full h-full bg-gray-200 flex flex-col items-center justify-center text-gray-400">
-              <span className="text-lg font-medium">Hero Image Placeholder</span>
-              <span className="text-sm">(800 x 600)</span>
-            </div>
+            <Image 
+              src="/images/makam-hero.jpeg"
+              alt="Hero Image Bookimin"
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover"
+              priority
+            />
             <div className="absolute inset-0 bg-linear-to-tr from-black/10 to-transparent" />
           </div>
         </div>
