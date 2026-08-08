@@ -6,31 +6,24 @@ import { useState, useMemo } from "react";
 interface AjukanIklanModalProps {
   isOpen: boolean;
   onClose: () => void;
-  usdToIdrRate: number;
 }
 
-export default function AjukanIklanModal({ isOpen, onClose, usdToIdrRate }: AjukanIklanModalProps) {
+export default function AjukanIklanModal({ isOpen, onClose }: AjukanIklanModalProps) {
   const [formData, setFormData] = useState({
     tipe: "SEO",
-    durasi: "7",
+    durasi: "30",
   });
 
   const makamName = "Al Azhar Memorial Garden"; // Static for MVP, usually fetched from context
-
-  // Static pricing in USD
-  const PRICING_USD = {
-    SEO: 2, // $2 per day
-    Popup: 3, // $3 per day
-  };
+  const hargaPerBulan = 278000;
+  const sisaKuota = 12; // Static for demo: 15 - 3 active
 
   const calculateCost = useMemo(() => {
-    const dailyRateUsd = PRICING_USD[formData.tipe as keyof typeof PRICING_USD];
-    const duration = parseInt(formData.durasi) || 0;
-    const totalUsd = dailyRateUsd * duration;
-    const totalIdr = totalUsd * usdToIdrRate;
+    const months = parseInt(formData.durasi) / 30 || 1;
+    const totalIdr = hargaPerBulan * months;
 
-    return { totalUsd, totalIdr };
-  }, [formData.tipe, formData.durasi, usdToIdrRate]);
+    return { totalIdr };
+  }, [formData.durasi]);
 
   if (!isOpen) return null;
 
@@ -60,6 +53,12 @@ export default function AjukanIklanModal({ isOpen, onClose, usdToIdrRate }: Ajuk
           >
             <X size={20} strokeWidth={2} />
           </button>
+        </div>
+        
+        {/* Quota Banner */}
+        <div className="bg-amber-50 border-b border-amber-100 px-6 py-3 flex items-center justify-between">
+          <span className="text-[12px] font-medium text-amber-800">Sisa Kuota Iklan Platform Bulan Ini</span>
+          <span className="text-[13px] font-bold text-amber-900">{sisaKuota} / 15 Slot</span>
         </div>
 
         <div className="p-6 space-y-6">
@@ -99,7 +98,7 @@ export default function AjukanIklanModal({ isOpen, onClose, usdToIdrRate }: Ajuk
                 </div>
                 <h3 className="font-bold text-gray-900 text-[14px]">SEO Booster</h3>
                 <p className="text-[11px] text-gray-500 mt-1 line-clamp-2">Peringkat teratas di halaman pencarian Cari Makam.</p>
-                <div className="mt-3 font-bold text-[#0D9488] text-[13px]">${PRICING_USD.SEO} <span className="font-medium text-[10px] text-gray-500">/ hari</span></div>
+                <div className="mt-3 font-bold text-[#0D9488] text-[13px]">{formatIdr(hargaPerBulan)} <span className="font-medium text-[10px] text-gray-500">/ bulan</span></div>
               </div>
 
               {/* Option 2: Popup */}
@@ -123,7 +122,7 @@ export default function AjukanIklanModal({ isOpen, onClose, usdToIdrRate }: Ajuk
                 </div>
                 <h3 className="font-bold text-gray-900 text-[14px]">Popup Banner</h3>
                 <p className="text-[11px] text-gray-500 mt-1 line-clamp-2">Tampil sekilas saat pelanggan pertama kali membuka web.</p>
-                <div className="mt-3 font-bold text-[#0D9488] text-[13px]">${PRICING_USD.Popup} <span className="font-medium text-[10px] text-gray-500">/ hari</span></div>
+                <div className="mt-3 font-bold text-[#0D9488] text-[13px]">{formatIdr(hargaPerBulan)} <span className="font-medium text-[10px] text-gray-500">/ bulan</span></div>
               </div>
             </div>
           </div>
@@ -136,27 +135,23 @@ export default function AjukanIklanModal({ isOpen, onClose, usdToIdrRate }: Ajuk
               onChange={(e) => handleChange("durasi", e.target.value)}
               className="w-full px-3 py-2 border border-gray-200 rounded-lg text-[13px] focus:outline-none focus:ring-2 focus:ring-[#0D9488]/20 focus:border-[#0D9488] bg-white cursor-pointer"
             >
-              <option value="7">Paket 7 Hari</option>
-              <option value="14">Paket 14 Hari</option>
-              <option value="30">Paket 30 Hari</option>
+              <option value="30">1 Bulan (30 Hari)</option>
+              <option value="60">2 Bulan (60 Hari)</option>
+              <option value="90">3 Bulan (90 Hari)</option>
             </select>
           </div>
 
           {/* Estimasi Biaya */}
           <div className="bg-gray-50 border border-gray-200 p-4 rounded-xl">
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-[12px] text-gray-500">Durasi Terpilih</span>
-              <span className="text-[13px] font-bold text-gray-900">{formData.durasi} Hari</span>
-            </div>
             <div className="flex justify-between items-center mb-3">
-              <span className="text-[12px] text-gray-500">Rate Asing (USD)</span>
-              <span className="text-[13px] font-bold text-gray-900">${calculateCost.totalUsd.toFixed(2)}</span>
+              <span className="text-[12px] text-gray-500">Durasi Terpilih</span>
+              <span className="text-[13px] font-bold text-gray-900">{parseInt(formData.durasi) / 30} Bulan</span>
             </div>
             
             <div className="pt-3 border-t border-gray-200 border-dashed flex justify-between items-center">
               <div>
-                <div className="text-[12px] font-bold text-gray-700">Total Estimasi (IDR)</div>
-                <div className="text-[10px] text-gray-400 mt-0.5">Realtime Exchange Rate</div>
+                <div className="text-[12px] font-bold text-gray-700">Total Tagihan (IDR)</div>
+                <div className="text-[10px] text-gray-400 mt-0.5">Sudah termasuk pajak</div>
               </div>
               <div className="text-right">
                 <div className="text-xl font-black text-[#0D9488]">{formatIdr(calculateCost.totalIdr)}</div>
