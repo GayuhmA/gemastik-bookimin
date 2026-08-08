@@ -9,28 +9,13 @@ export default function MitraIklanPage() {
   const [activeTab, setActiveTab] = useState("Semua");
   const [searchQuery, setSearchQuery] = useState("");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [usdToIdrRate, setUsdToIdrRate] = useState<number | null>(null);
 
-  useEffect(() => {
-    // Fetch real-time exchange rate
-    fetch("https://open.er-api.com/v6/latest/USD")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data && data.rates && data.rates.IDR) {
-          setUsdToIdrRate(data.rates.IDR);
-        }
-      })
-      .catch((err) => console.error("Failed to fetch exchange rate:", err));
-  }, []);
-
-  const formatIdr = (usdValue: number) => {
-    if (!usdToIdrRate) return "Menghitung..."; // fallback loading state
-    const idrValue = usdValue * usdToIdrRate;
+  const formatIdr = (value: number) => {
     return new Intl.NumberFormat("id-ID", {
       style: "currency",
       currency: "IDR",
       minimumFractionDigits: 0,
-    }).format(idrValue);
+    }).format(value);
   };
 
   const tabs = ["Semua", "Aktif", "Menunggu Bayar", "Pending", "Selesai", "Ditolak"];
@@ -189,9 +174,8 @@ export default function MitraIklanPage() {
                     
                     <td className="px-4 py-5">
                       <div className="font-bold text-[#0F172A] text-[13px]">
-                        {formatIdr(item.hargaUsd)}
+                        {formatIdr(item.harga)}
                       </div>
-                      <div className="text-[11px] text-gray-500 mt-1">(${item.hargaUsd}.00)</div>
                     </td>
                     
                     <td className="px-4 py-5">
@@ -230,13 +214,10 @@ export default function MitraIklanPage() {
       </div>
 
       {/* Modal Ajukan Iklan */}
-      {usdToIdrRate !== null && (
-        <AjukanIklanModal 
-          isOpen={isAddModalOpen}
-          onClose={() => setIsAddModalOpen(false)}
-          usdToIdrRate={usdToIdrRate}
-        />
-      )}
+      <AjukanIklanModal 
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+      />
     </div>
   );
 }
