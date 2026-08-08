@@ -29,11 +29,11 @@ export default function LoginPage() {
       } else if (email === "merchant1@gmail.com" && password === "merchant") {
         console.log("Logged in as Merchant 1");
         alert("Berhasil login sebagai Merchant 1");
-        // router.push("/dashboard-merchant");
+        router.push("/mitra/dashboard");
       } else if (email === "merchant2@gmail.com" && password === "merchant") {
         console.log("Logged in as Merchant 2");
         alert("Berhasil login sebagai Merchant 2");
-        // router.push("/dashboard-merchant");
+        router.push("/mitra/dashboard");
       } else {
         setError("Email atau password salah.");
       }
