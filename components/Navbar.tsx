@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { Flower2, Menu, X } from "lucide-react";
+import Image from "next/image";
+import { Menu, X } from "lucide-react";
 import { useState } from "react";
 
 export default function Navbar() {
@@ -14,8 +15,14 @@ export default function Navbar() {
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center gap-2 group">
-              <div className="text-primary-dark transition-transform group-hover:scale-105">
-                <Flower2 size={32} strokeWidth={1.5} />
+              <div className="transition-transform group-hover:scale-105 relative w-9 h-8">
+                <Image 
+                  src="/logo/logo.svg" 
+                  alt="Bookimin Logo" 
+                  fill
+                  className="object-contain"
+                  priority
+                />
               </div>
               <span className="font-bold text-2xl text-primary-dark tracking-tight">
                 Bookimin

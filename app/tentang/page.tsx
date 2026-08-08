@@ -1,6 +1,7 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Search, Clock, ShieldCheck, Heart } from "lucide-react";
+import Image from "next/image";
 
 export default function TentangPage() {
   return (
@@ -75,10 +76,13 @@ export default function TentangPage() {
             {/* Right Content - Image Placeholder matching Hero.tsx */}
             <div className="relative h-100 md:h-150 w-full lg:order-last order-first">
               <div className="absolute inset-0 bg-gray-200 rounded-3xl overflow-hidden shadow-xl">
-                <div className="w-full h-full flex flex-col items-center justify-center text-gray-400">
-                  <span className="text-lg font-medium">Tentang Image Placeholder</span>
-                  <span className="text-sm mt-1">(800 x 1000)</span>
-                </div>
+                <Image 
+                  src="/images/makam-hero.jpeg"
+                  alt="Tentang Bookimin"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover"
+                />
                 <div className="absolute inset-0 bg-linear-to-tr from-black/5 to-transparent"></div>
               </div>
             </div>
