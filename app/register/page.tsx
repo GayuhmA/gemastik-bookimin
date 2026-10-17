@@ -2,208 +2,272 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { User, Mail, Phone, Lock, Eye, EyeOff, Loader2 } from "lucide-react";
+import AuthLayout from "@/components/auth/AuthLayout";
 
 export default function RegisterPage() {
+  const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    
-    // Simulate API call delay for demonstration
+    setError("");
+
+    if (password.length < 8) {
+      setError("Kata sandi harus minimal 8 karakter.");
+      setIsLoading(false);
+      return;
+    }
+
     try {
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      console.log("Register:", { name, email, phone, password });
-      // TODO: Firebase Auth integration & save to users collection
+      // Simulate registration delay
+      await new Promise((resolve) => setTimeout(resolve, 900));
+      // Successful registration -> route to login
       router.push("/login");
+    } catch {
+      setError("Terjadi kendala saat pendaftaran. Silakan coba kembali.");
     } finally {
       setIsLoading(false);
     }
   };
 
+  const handleGoogleSignUp = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      router.push("/");
+    }, 700);
+  };
+
   return (
-    <div className="min-h-screen flex relative bg-linear-to-br from-[#e8edf4] via-[#c5d0dd] to-[#9aafbf] selection:bg-blue-200">
-      {/* Left Side - Text Content */}
-      <div className="hidden lg:flex lg:w-1/2 relative items-center justify-center overflow-hidden">
-        {/* Decorative background blurs for depth */}
-        <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-blue-300/30 rounded-full blur-3xl mix-blend-multiply pointer-events-none" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-white/40 rounded-full blur-3xl mix-blend-overlay pointer-events-none" />
-        
-        <div className="max-w-135 px-8 lg:px-12 relative z-10">
-          <h2 className="text-[40px] font-extrabold text-primary leading-tight mb-5 tracking-tight">
-            Bergabung dengan <span className="text-blue-600">Bookimin</span>
-          </h2>
-          <p className="text-slate-600 text-[16px] leading-relaxed">
-            Daftar sekarang untuk mulai mencari, membandingkan, dan mengamankan lahan peristirahatan terbaik bagi orang terkasih dengan mudah dan transparan.
-          </p>
+    <AuthLayout>
+      {/* Heading & Subtitle */}
+      <div className="mt-6 mb-6">
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-primary-dark tracking-tight">
+          Buat Akun Bookimin
+        </h1>
+        <p className="text-xs sm:text-sm text-slate-500 leading-relaxed mt-2 font-normal">
+          Satu akun untuk merencanakan dan mengelola kebutuhan keluarga dengan lebih tenang.
+        </p>
+      </div>
+
+      {/* Social Sign Up (Google) */}
+      <button
+        type="button"
+        onClick={handleGoogleSignUp}
+        disabled={isLoading}
+        className="w-full flex items-center justify-center gap-3 py-3 px-4 border border-slate-200/90 hover:border-slate-300 rounded-xl bg-white hover:bg-slate-50/70 text-slate-700 text-xs sm:text-sm font-semibold transition-all shadow-2xs cursor-pointer group disabled:opacity-60"
+      >
+        <svg
+          className="w-4 h-4 shrink-0 transition-transform group-hover:scale-105"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <path
+            fill="#4285F4"
+            d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17Z"
+          />
+          <path
+            fill="#34A853"
+            d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.27 21.43 7.33 24 12 24Z"
+          />
+          <path
+            fill="#FBBC05"
+            d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.17 0 9.99 0 12s.45 3.83 1.25 5.42l4.03-3.15Z"
+          />
+          <path
+            fill="#EA4335"
+            d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.27 2.57 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98Z"
+          />
+        </svg>
+        <span>Daftar dengan Google</span>
+      </button>
+
+      {/* Divider */}
+      <div className="relative flex items-center justify-center my-5">
+        <div className="absolute inset-0 flex items-center">
+          <div className="w-full border-t border-slate-200/80" />
+        </div>
+        <div className="relative px-3 bg-white text-[11px] text-slate-400 font-medium">
+          atau daftar dengan email
         </div>
       </div>
 
-      {/* Right Side - Register Form Card */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-8 relative z-10">
-        <div className="w-full max-w-125 bg-white/95 backdrop-blur-xl rounded-[28px] shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] p-8 sm:p-12 border border-white/60">
-          {/* Header */}
-          <div className="mb-8 text-center sm:text-left">
-            <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Sign up</h1>
-            <p className="text-slate-500 text-[14px] mt-2">Create an account to get started.</p>
-          </div>
-
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Name */}
-            <div className="space-y-1.5">
-              <label htmlFor="name" className="block text-[13px] font-bold text-slate-700">
-                Full Name
-              </label>
-              <input
-                id="name"
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="John Doe"
-                className="w-full h-12 px-4 rounded-xl border border-slate-200 bg-white/50 text-sm text-slate-900 outline-none placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all duration-200"
-                required
-                disabled={isLoading}
-              />
+      {/* Registration Form */}
+      <form onSubmit={handleSubmit} className="space-y-3.5">
+        {/* Nama Lengkap */}
+        <div>
+          <label
+            htmlFor="name"
+            className="block text-xs font-semibold text-slate-700 mb-1"
+          >
+            Nama Lengkap
+          </label>
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+              <User size={16} />
             </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Email */}
-              <div className="space-y-1.5">
-                <label htmlFor="email" className="block text-[13px] font-bold text-slate-700">
-                  Email
-                </label>
-                <input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="name@example.com"
-                  className="w-full h-12 px-4 rounded-xl border border-slate-200 bg-white/50 text-sm text-slate-900 outline-none placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all duration-200"
-                  required
-                  disabled={isLoading}
-                />
-              </div>
-
-              {/* Phone */}
-              <div className="space-y-1.5">
-                <label htmlFor="phone" className="block text-[13px] font-bold text-slate-700">
-                  Phone Number <span className="font-normal text-slate-400">(Optional)</span>
-                </label>
-                <input
-                  id="phone"
-                  type="tel"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  placeholder="0812xxxx"
-                  className="w-full h-12 px-4 rounded-xl border border-slate-200 bg-white/50 text-sm text-slate-900 outline-none placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all duration-200"
-                  disabled={isLoading}
-                />
-              </div>
-            </div>
-
-            {/* Password */}
-            <div className="space-y-1.5">
-              <label htmlFor="password" className="block text-[13px] font-bold text-slate-700">
-                Password
-              </label>
-              <div className="relative">
-                <input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Create a password"
-                  className="w-full h-12 px-4 pr-11 rounded-xl border border-slate-200 bg-white/50 text-sm text-slate-900 outline-none placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all duration-200"
-                  required
-                  minLength={6}
-                  disabled={isLoading}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-md transition-all focus:outline-none focus:ring-2 focus:ring-blue-500/20"
-                  aria-label={showPassword ? "Hide password" : "Show password"}
-                  disabled={isLoading}
-                >
-                  {showPassword ? <Eye size={18} /> : <EyeOff size={18} />}
-                </button>
-              </div>
-            </div>
-
-            {/* Sign Up Button */}
-            <div className="pt-3">
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-all duration-200 text-[15px] shadow-sm hover:shadow hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-sm flex items-center justify-center gap-2"
-              >
-                {isLoading ? (
-                  <>
-                    <Loader2 size={18} className="animate-spin" />
-                    Creating account...
-                  </>
-                ) : (
-                  "Create Account"
-                )}
-              </button>
-            </div>
-          </form>
-
-          {/* Divider */}
-          <div className="relative flex items-center py-6">
-            <div className="flex-1 border-t border-slate-200" />
-            <span className="px-4 text-[13px] text-slate-400 font-medium bg-transparent">Or continue with</span>
-            <div className="flex-1 border-t border-slate-200" />
-          </div>
-
-          {/* Social Login Buttons */}
-          <div className="grid grid-cols-2 gap-3">
-            <button
-              type="button"
+            <input
+              id="name"
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Nama lengkap Anda"
+              required
               disabled={isLoading}
-              className="flex items-center justify-center gap-2.5 h-12 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed group shadow-sm"
-            >
-              {/* Google Icon */}
-              <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg" className="group-hover:scale-105 transition-transform">
-                <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615Z" fill="#4285F4"/>
-                <path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18Z" fill="#34A853"/>
-                <path d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.997 8.997 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332Z" fill="#FBBC05"/>
-                <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58Z" fill="#EA4335"/>
-              </svg>
-              <span className="text-[13px] font-semibold text-slate-700">Google</span>
-            </button>
-
-            <button
-              type="button"
-              disabled={isLoading}
-              className="flex items-center justify-center gap-2.5 h-12 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed group shadow-sm"
-            >
-              {/* Apple Icon */}
-              <svg width="15" height="18" viewBox="0 0 14 18" xmlns="http://www.w3.org/2000/svg" fill="#0f172a" className="group-hover:scale-105 transition-transform">
-                <path d="M13.17 6.2c-.08.06-1.55.89-1.55 2.73 0 2.13 1.87 2.89 1.93 2.91-.01.05-.3 1.03-1 2.04-.6.88-1.22 1.76-2.17 1.76s-1.19-.55-2.29-.55c-1.07 0-1.45.57-2.32.57-.87 0-1.49-.82-2.19-1.82C2.52 12.3 1.77 10.14 1.77 8.1c0-3.29 2.14-5.03 4.24-5.03 1.12 0 2.05.73 2.75.73.67 0 1.71-.78 2.98-.78.48 0 2.21.04 3.35 1.68l.08-.5ZM9.88 2c.48-.57.82-1.36.82-2.15 0-.11-.01-.22-.03-.3-.78.03-1.7.52-2.26 1.15-.44.49-.85 1.28-.85 2.09 0 .12.02.24.03.28.05.01.14.02.22.02.7 0 1.57-.47 2.07-1.09Z"/>
-              </svg>
-              <span className="text-[13px] font-semibold text-slate-700">Apple</span>
-            </button>
+              className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200/90 rounded-xl text-sm text-primary-dark placeholder:text-slate-400 focus:outline-none focus:border-accent-cta focus:ring-2 focus:ring-accent-cta/15 transition-all shadow-2xs"
+            />
           </div>
-
-          {/* Login Link */}
-          <p className="text-center text-[14px] text-slate-500 mt-8">
-            Already have an account?{" "}
-            <Link href="/login" className="text-blue-600 font-bold hover:text-blue-700 hover:underline underline-offset-4 transition-all">
-              Sign In
-            </Link>
-          </p>
         </div>
-      </div>
-    </div>
+
+        {/* Email Address */}
+        <div>
+          <label
+            htmlFor="email"
+            className="block text-xs font-semibold text-slate-700 mb-1"
+          >
+            Email Address
+          </label>
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+              <Mail size={16} />
+            </div>
+            <input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="nama@email.com"
+              required
+              disabled={isLoading}
+              className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200/90 rounded-xl text-sm text-primary-dark placeholder:text-slate-400 focus:outline-none focus:border-accent-cta focus:ring-2 focus:ring-accent-cta/15 transition-all shadow-2xs"
+            />
+          </div>
+        </div>
+
+        {/* Nomor WhatsApp */}
+        <div>
+          <label
+            htmlFor="phone"
+            className="block text-xs font-semibold text-slate-700 mb-1"
+          >
+            Nomor WhatsApp
+          </label>
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+              <Phone size={16} />
+            </div>
+            <input
+              id="phone"
+              type="tel"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              placeholder="Contoh: 08xx-xxxx-xxxx"
+              required
+              disabled={isLoading}
+              className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200/90 rounded-xl text-sm text-primary-dark placeholder:text-slate-400 focus:outline-none focus:border-accent-cta focus:ring-2 focus:ring-accent-cta/15 transition-all shadow-2xs"
+            />
+          </div>
+        </div>
+
+        {/* Kata Sandi */}
+        <div>
+          <label
+            htmlFor="password"
+            className="block text-xs font-semibold text-slate-700 mb-1"
+          >
+            Kata Sandi
+          </label>
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+              <Lock size={16} />
+            </div>
+            <input
+              id="password"
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Buat kata sandi Anda"
+              required
+              disabled={isLoading}
+              className="w-full pl-10 pr-11 py-2.5 bg-white border border-slate-200/90 rounded-xl text-sm text-primary-dark placeholder:text-slate-400 focus:outline-none focus:border-accent-cta focus:ring-2 focus:ring-accent-cta/15 transition-all shadow-2xs"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
+              aria-label={showPassword ? "Sembunyikan kata sandi" : "Tampilkan kata sandi"}
+            >
+              {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+            </button>
+          </div>
+          <span className="text-[11px] text-slate-400 block mt-1">
+            Minimal 8 karakter, gunakan huruf dan angka.
+          </span>
+        </div>
+
+        {/* Terms & Conditions Agreement */}
+        <div className="text-[11px] text-slate-500 leading-relaxed pt-1">
+          Dengan mendaftar, Anda menyetujui{" "}
+          <Link
+            href="/syarat-ketentuan"
+            className="font-semibold text-accent-cta hover:text-accent-cta-dark hover:underline"
+          >
+            Syarat & Ketentuan
+          </Link>{" "}
+          serta{" "}
+          <Link
+            href="/kebijakan-privasi"
+            className="font-semibold text-accent-cta hover:text-accent-cta-dark hover:underline"
+          >
+            Kebijakan Privasi Bookimin.
+          </Link>
+        </div>
+
+        {/* Error Message */}
+        {error && (
+          <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium">
+            {error}
+          </div>
+        )}
+
+        {/* Submit Button */}
+        <div className="pt-2">
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="w-full py-3 sm:py-3.5 px-4 bg-accent-cta hover:bg-accent-cta-dark text-white font-bold rounded-xl text-sm transition-all shadow-xs hover:shadow active:scale-[0.99] disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
+          >
+            {isLoading ? (
+              <>
+                <Loader2 size={16} className="animate-spin" />
+                <span>Mendaftarkan akun...</span>
+              </>
+            ) : (
+              <span>Buat Akun Bookimin</span>
+            )}
+          </button>
+        </div>
+      </form>
+
+      {/* Login Navigation Link */}
+      <p className="text-xs text-slate-500 text-center mt-5">
+        Sudah memiliki akun?{" "}
+        <Link
+          href="/login"
+          className="font-bold text-accent-cta hover:text-accent-cta-dark hover:underline transition-colors"
+        >
+          Masuk Sekarang
+        </Link>
+      </p>
+    </AuthLayout>
   );
 }
