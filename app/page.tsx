@@ -1,21 +1,29 @@
-import TopAnnouncement from "@/components/TopAnnouncement";
-import Navbar from "@/components/Navbar";
-import Hero from "@/components/Hero";
-import DividerBanner from "@/components/DividerBanner";
-import Services from "@/components/Services";
-import Footer from "@/components/Footer";
+import Navbar from "@/components/home/Navbar";
+import HeroSection from "@/components/home/HeroSection";
+import BookingJourneySection from "@/components/home/BookingJourneySection";
+import CemeteryRecommendationsSection from "@/components/home/CemeteryRecommendationsSection";
+import BereavementCareSection from "@/components/home/BereavementCareSection";
+import Footer from "@/components/home/Footer";
+import FloatingAIChat from "@/components/home/FloatingAIChat";
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <>
-      <TopAnnouncement />
+    <div className="min-h-screen flex flex-col bg-background text-primary antialiased selection:bg-teal-100 selection:text-teal-900">
       <Navbar />
+
       <main className="flex-1 flex flex-col w-full">
-        <Hero />
-        <DividerBanner />
-        <Services />
+        <HeroSection />
+
+        <BookingJourneySection />
+
+        <CemeteryRecommendationsSection />
+
+        <BereavementCareSection />
       </main>
+
       <Footer />
-    </>
+
+      <FloatingAIChat />
+    </div>
   );
 }
