@@ -1,43 +1,27 @@
-import Navbar from "@/components/Navbar";
-import SearchBarOverlay from "@/components/SearchBarOverlay";
-import MakamCarousel from "@/components/MakamCarousel";
-import Footer from "@/components/Footer";
-import SearchResults from "@/components/SearchResults";
-import { formatRupiah, makamData } from "@/data/makam";
+import { Suspense } from "react";
+import type { Metadata } from "next";
+import CariMakamClient from "./CariMakamClient";
 
-type Props = {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+export const metadata: Metadata = {
+  title: "Cari Makam — Direktori Lahan Pemakaman Resmi & Terverifikasi | Bookimin",
+  description:
+    "Cari dan bandingkan lahan pemakaman resmi di Sleman, Bantul, Yogyakarta, dan sekitarnya. Informasi ketersediaan real-time, harga transparan tanpa perantara.",
 };
 
-export default async function CariMakamPage(props: Props) {
-  const searchParams = await props.searchParams;
-  const query = typeof searchParams?.q === "string" ? searchParams.q : undefined;
-  const results = makamData.map((makam) => ({
-    ...makam,
-    price: formatRupiah(makam.price),
-  }));
-  const carouselItems = [...results, ...results];
-
+export default function CariMakamPage() {
   return (
-    <>
-      <Navbar />
-
-      {query ? (
-        <SearchResults initialQuery={query} results={results} />
-      ) : (
-        <main className="flex-1 flex flex-col w-full pb-16">
-          <div className="w-full h-50 md:h-70 bg-[#9CA3AF] relative">
-            <SearchBarOverlay />
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-background">
+          <div className="flex items-center gap-2 text-sm text-slate-500 font-medium">
+            <span className="w-2 h-2 rounded-full bg-accent-cta animate-ping" />
+            <span>Memuat direktori pemakaman...</span>
           </div>
-
-          <div className="max-w-7xl mx-auto w-full pt-20">
-            <MakamCarousel title="Rekomendasi" items={carouselItems} />
-            <MakamCarousel title="Terdekat" items={[...results].reverse().concat(results)} />
-          </div>
-        </main>
-      )}
-
-      <Footer />
-    </>
+        </div>
+      }
+    >
+      <CariMakamClient />
+    </Suspense>
   );
 }
+
